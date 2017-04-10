@@ -1,11 +1,10 @@
 package com.rgabay.carsproc;
 
-import com.rgabay.carsproc.CarEvaluator;
-import com.rgabay.carsproc.CarExpander;
 import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
 import org.neo4j.graphdb.Path;
 import org.neo4j.graphdb.traversal.TraversalDescription;
+
 import org.neo4j.logging.Log;
 import org.neo4j.procedure.*;
 
@@ -19,12 +18,14 @@ public class CarSproc {
     @Context
     public Log log;
 
-    static final CarExpander carExpander = new CarExpander();
-    static final CarEvaluator carEvaluator = new CarEvaluator();
+
+    private static final CarExpander carExpander = new CarExpander();
+    private static final CarEvaluator carEvaluator = new CarEvaluator();
 
     @Description("com.rgabay.carsproc(node) | deletes wheels")
     @Procedure(name = "com.rgabay.carsproc", mode = Mode.WRITE)
     public Stream<PathResult> carsproc( @Name("startNode") Node startNode) {
+
         TraversalDescription myTraversal = db.traversalDescription()
                 .depthFirst()
                 .expand(carExpander)
